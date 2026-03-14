@@ -1,4 +1,4 @@
-<![CDATA[<div align="center">
+<div align="center">
 
 # 🎓 ClubSphere — Campus Club Management Platform
 
@@ -420,4 +420,4 @@ This project is open source and available under the [ISC License](https://openso
 **Built with ❤️ by [Bhushan](https://github.com/Bhushan144)**
 
 </div>
-]]>
+
