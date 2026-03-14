@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
 import Club from '../models/clubModel.js';
 import Event from '../models/eventModel.js'; // <-- ADDED EVENT MODEL
+import Notification from '../models/notificationModel.js';
 
 // Load DB connection
 import connectDB from '../config/db.js';
@@ -97,7 +98,8 @@ const seedData = async () => {
 const importData = async () => {
   try {
     // Clear all existing data first
-    await Event.deleteMany(); // <-- ADDED THIS LINE
+    await Notification.deleteMany();
+    await Event.deleteMany();
     await User.deleteMany();
     await Club.deleteMany();
     
@@ -115,7 +117,8 @@ const importData = async () => {
 const destroyData = async () => {
   try {
     // Clear all collections
-    await Event.deleteMany(); // <-- ADDED THIS LINE
+    await Notification.deleteMany();
+    await Event.deleteMany();
     await User.deleteMany();
     await Club.deleteMany();
     console.log('Data Destroyed!'.red.inverse);

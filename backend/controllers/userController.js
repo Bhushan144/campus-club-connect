@@ -14,6 +14,7 @@ const generateTokenAndSetCookie = (res, userId, userRole) => {
   res.cookie('jwt', token, {
     httpOnly: true, // Prevents client-side JS from accessing the cookie
     secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
+    sameSite: 'strict', // Prevents CSRF attacks
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
 };

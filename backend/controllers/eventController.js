@@ -134,14 +134,16 @@ export const getEvents = asyncHandler(async (req, res) => {
     case 'RoomAllotter':
        events = await Event.find({ 
            overallStatus: 'Approved_Pending_Resources',
-           'resourceRequests.venue.isRequired': true 
+           'resourceRequests.venue.isRequired': true,
+           'resourceRequests.venue.status': 'Pending'
         }).populate(populateQuery);
        break;
 
     case 'Accounts':
         events = await Event.find({ 
             overallStatus: 'Approved_Pending_Resources',
-            'resourceRequests.budget.isRequired': true
+            'resourceRequests.budget.isRequired': true,
+            'resourceRequests.budget.status': 'Pending'
         }).populate(populateQuery);
         break;
 
@@ -224,8 +226,17 @@ export const approveEvent = asyncHandler(async (req, res) => {
         statusUpdated = true;
     }
 
+    // After HOD approval, check if the event can be immediately activated
+    // (i.e., no resources were requested)
+    const needsActivationCheck = (event.overallStatus === 'Approved_Pending_Resources');
+
     if (statusUpdated) {
         const updatedEvent = await event.save();
+
+        // If HOD just approved, check if event can go Active immediately
+        if (needsActivationCheck) {
+            await checkAndActivateEvent(event._id);
+        }
 
         // Notify President
         let roleName = user.role; 
@@ -238,7 +249,9 @@ export const approveEvent = asyncHandler(async (req, res) => {
             relatedEventId: event._id
         });
 
-        res.json(updatedEvent);
+        // Re-fetch the event to get the potentially updated status
+        const finalEvent = await Event.findById(event._id);
+        res.json(finalEvent);
     } else {
         res.status(403); 
         throw new Error('Not authorized to approve this event at its current stage');
@@ -265,14 +278,20 @@ export const rejectEvent = asyncHandler(async (req, res) => {
 
     if (event.overallStatus === 'Pending_Faculty_Approval' && user.role === 'FacultyHead') {
         event.approvalChain.facultyHead.status = 'Rejected';
+        event.approvalChain.facultyHead.approvedBy = user._id;
+        event.approvalChain.facultyHead.timestamp = Date.now();
         event.approvalChain.facultyHead.comments = comments;
         rejectionLogged = true;
     } else if (event.overallStatus === 'Pending_VC_Approval' && user.role === 'VC') {
         event.approvalChain.verticalCoordinator.status = 'Rejected';
+        event.approvalChain.verticalCoordinator.approvedBy = user._id;
+        event.approvalChain.verticalCoordinator.timestamp = Date.now();
         event.approvalChain.verticalCoordinator.comments = comments;
         rejectionLogged = true;
     } else if (event.overallStatus === 'Pending_HOD_Approval' && user.role === 'HOD') {
         event.approvalChain.hod.status = 'Rejected';
+        event.approvalChain.hod.approvedBy = user._id;
+        event.approvalChain.hod.timestamp = Date.now();
         event.approvalChain.hod.comments = comments;
         rejectionLogged = true;
     }

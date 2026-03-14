@@ -2,6 +2,11 @@
 .env
 .env.*
 backend/.env
+implementation_plan.md  
+implementation_plan.md.resolved
+walkthrough.md
+walkthrough.md.resolved
+
 
 # node modules
 node_modules/

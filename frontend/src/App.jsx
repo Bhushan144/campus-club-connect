@@ -90,10 +90,12 @@ const App = () => {
 
 
         {/* ADMIN ROUTES */}
-        <Route element={<RoleBasedRoute allowedRoles={['SuperAdmin']} />}>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="users" element={<UserListPage />} />
-            <Route path="clubs" element={<ClubListPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route element={<RoleBasedRoute allowedRoles={['SuperAdmin']} />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="users" element={<UserListPage />} />
+              <Route path="clubs" element={<ClubListPage />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

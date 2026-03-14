@@ -34,8 +34,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    // Simplified logout for the test
+  const logout = async () => {
+    try {
+      // Call backend to clear the httpOnly JWT cookie
+      await axios.post('/api/users/logout');
+    } catch (err) {
+      console.error('Logout API call failed:', err);
+    }
     setUser(null);
     localStorage.removeItem('userInfo');
     window.location.href = '/login';

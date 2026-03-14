@@ -2,6 +2,7 @@
 
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js'; // Import user routes
@@ -14,6 +15,12 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// CORS configuration — allows frontend to send cookies
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true,
+}));
 
 // This middleware is crucial for parsing JSON in the body of requests
 app.use(express.json());

@@ -52,6 +52,13 @@ export const updateUser = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.role = req.body.role || user.role;
     user.department = req.body.department || user.department;
+
+    // Only update password if a new one was provided, and hash it
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+    }
+
     const updatedUser = await user.save();
     res.json(updatedUser);
   } else {
@@ -165,7 +172,14 @@ export const updateClub = asyncHandler(async (req, res) => {
 export const deleteClub = asyncHandler(async (req, res) => {
   const club = await Club.findById(req.params.id);
   if (club) {
-    // Advanced: You might add logic here to handle events of a deleted club
+    // Un-assign the club from the president and faculty head before deleting
+    if (club.presidentId) {
+      await User.findByIdAndUpdate(club.presidentId, { $unset: { assignedClubId: '' } });
+    }
+    if (club.facultyHeadId) {
+      await User.findByIdAndUpdate(club.facultyHeadId, { $unset: { assignedClubId: '' } });
+    }
+
     await club.deleteOne();
     res.json({ message: 'Club removed' });
   } else {
