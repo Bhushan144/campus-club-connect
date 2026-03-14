@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎓 ClubSphere — Campus Club Management Platform
+# 🎓Campus Club Management Platform
 
 **A full-stack web application that digitizes the entire lifecycle of college club event management — from proposal creation to multi-tier approval, resource allocation, and real-time notifications.**
 
@@ -24,7 +24,7 @@ In most colleges, the process of organizing a club event is **manual, fragmented
 4. Get a budget sanctioned from the Accounts office
 5. Manually inform students about the event
 
-**ClubSphere eliminates this bottleneck** by providing a single, unified platform where every stakeholder — from Club President to HOD — has a role-specific dashboard to manage their part of the workflow digitally.
+**Campus Club Connect eliminates this bottleneck** by providing a single, unified platform where every stakeholder — from Club President to HOD — has a role-specific dashboard to manage their part of the workflow digitally.
 
 ---
 
@@ -207,21 +207,21 @@ CampusClubConnect/
 
 ```mermaid
 flowchart TD
-    A["Club President\nCreates Event Proposal"] --> B{"Faculty Head\nReview"}
-    B -- Approved --> C{"Vertical Coordinator\n(VC) Review"}
-    B -- Rejected --> Z["❌ Event Rejected\n(with comments)"]
-    C -- Approved --> D{"HOD Review"}
+    A[Club President<br/>Creates Event Proposal] --> B{Faculty Head<br/>Review}
+    B -- Approved --> C{Vertical Coordinator<br/>Review}
+    B -- Rejected --> Z[Event Rejected<br/>with comments]
+    C -- Approved --> D{HOD Review}
     C -- Rejected --> Z
-    D -- Approved --> E{"Resources\nRequired?"}
+    D -- Approved --> E{Resources<br/>Required?}
     D -- Rejected --> Z
-    E -- No --> G["✅ Event Goes ACTIVE\n→ All Students Notified"]
-    E -- Yes --> F["Approved_Pending_Resources"]
-    F --> H{"Venue\nRequired?"}
-    F --> I{"Budget\nRequired?"}
-    H -- "Room Allotter\nallocates room" --> J{"All Resources\nFulfilled?"}
-    I -- "Accounts dept\napproves budget" --> J
+    E -- No --> G[Event Goes ACTIVE<br/>All Students Notified]
+    E -- Yes --> F[Approved Pending Resources]
+    F --> H{Venue<br/>Required?}
+    F --> I{Budget<br/>Required?}
+    H -- Room Allotter<br/>allocates room --> J{All Resources<br/>Fulfilled?}
+    I -- Accounts dept<br/>approves budget --> J
     J -- Yes --> G
-    G --> K["Event Date Passes\n→ Auto-Completed"]
+    G --> K[Event Date Passes<br/>Auto-Completed]
 ```
 
 ---
